@@ -33,7 +33,9 @@ app.use(passport.session());
 //   useUnifiedTopology: true
 // });
 
-mongoose.connect("mongodb+srv://admin_chirag:Test123@cluster0.9kkfz.mongodb.net/userDB", {
+const url=process.env.ATLAS_URL;
+
+mongoose.connect(url, {
   useNewUrlParser: true,
   useUnifiedTopology: true
 });
@@ -66,11 +68,14 @@ passport.deserializeUser(function(id, done) {
   });
 });
 
+const callbackURL= process.env.CALLBACK_URL;
+const userProfileURL=process.env.USER_PROFILE_URL;
+
 passport.use(new GoogleStrategy({
     clientID: process.env.CLIENT_ID,
     clientSecret: process.env.CLIENT_SECRET,
-    callbackURL: "https://sleepy-sands-61937.herokuapp.com/auth/google/secrets",
-    userProfileURL: "https://www.googleapis.com/oauth2/v3/userinfo"
+    callbackURL: callbackURL,
+    userProfileURL: userProfileURL
   },
   function(accessToken, refreshToken, profile, cb) {
     // console.log(profile);
